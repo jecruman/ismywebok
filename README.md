@@ -1,2 +1,2 @@
-# ismywebok
-IsMyWebOk 
+# IsMyWebOk – MVP
+See canvas for full documentation.
