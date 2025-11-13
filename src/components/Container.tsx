@@ -1,0 +1,1 @@
+export default function C({children}:{children:any}){return <div>{children}</div>}

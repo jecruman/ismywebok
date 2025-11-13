@@ -1,0 +1,1 @@
+export async function mockAudit(url:string){return {url,score:80}}

@@ -1,0 +1,1 @@
+export default function SB({score}:{score:number}){return <div>{score}</div>}

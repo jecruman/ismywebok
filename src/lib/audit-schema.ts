@@ -1,0 +1,1 @@
+export type AuditReport={url:string,score:number}
