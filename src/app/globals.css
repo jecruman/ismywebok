@@ -1,1 +1,11 @@
-@tailwind base;@tailwind components;@tailwind utilities; body{background:white;color:#2E2E2E;}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-white text-brand-dark antialiased;
+}
