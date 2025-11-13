@@ -1,1 +1,16 @@
-export type AuditReport={url:string,score:number}
+import { z } from 'zod';
+
+export const AuditFinding = z.object({
+  severity: z.enum(['HIGH', 'MED', 'LOW']),
+  message: z.string(),
+});
+
+export const AuditReport = z.object({
+  url: z.string().url(),
+  score: z.number().min(0).max(100),
+  summary: z.string(),
+  metrics: z.record(z.union([z.string(), z.number()])),
+  topFindings: z.array(AuditFinding),
+});
+
+export type AuditReport = z.infer<typeof AuditReport>;
