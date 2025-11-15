@@ -95,20 +95,26 @@ const summary_pl =
   const topFindings = [
     {
       severity: score < 60 ? "HIGH" : score < 80 ? "MED" : "LOW",
-      message:
+      message_en:
         "Improve core performance metrics (LCP, FCP, TBT) by optimizing images and reducing JavaScript.",
+      message_pl:
+        "Popraw kluczowe metryki wydajności (LCP, FCP, TBT) optymalizując obrazy i zmniejszając ilość JavaScriptu.",
     },
     {
       severity: "MED",
-      message:
+      message_en:
         "Check the detailed PageSpeed report for unused JavaScript and CSS and remove or defer them.",
+      message_pl:
+        "Sprawdź szczegółowy raport PageSpeed pod kątem nieużywanego JavaScriptu i CSS, a następnie usuń lub odłóż ich ładowanie.",
     },
     {
       severity: "LOW",
-      message:
+      message_en:
         "Consider implementing caching (CDN, HTTP caching headers) for static assets.",
+      message_pl:
+        "Rozważ wdrożenie mechanizmów cache (CDN, nagłówki HTTP cache) dla zasobów statycznych.",
     },
-  ] as AuditReport["topFindings"];
+  ];
 
   return {
     url,
