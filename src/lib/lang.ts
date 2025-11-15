@@ -1,1 +1,2 @@
-Add Polish language toggle (EN/PL)
+// src/lib/lang.ts
+export type Lang = 'en' | 'pl';
