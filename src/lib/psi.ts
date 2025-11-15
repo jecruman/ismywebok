@@ -91,10 +91,12 @@ const summary_pl =
     mobile_fcp: mobileMetrics.fcp ?? "n/a",
   };
 
-  // Very simple, generic findings to start
-  const topFindings = [
+  const severity: "HIGH" | "MED" | "LOW" =
+    score < 60 ? "HIGH" : score < 80 ? "MED" : "LOW";
+
+  const topFindings: AuditReport["topFindings"] = [
     {
-      severity: score < 60 ? "HIGH" : score < 80 ? "MED" : "LOW",
+      severity,
       message_en:
         "Improve core performance metrics (LCP, FCP, TBT) by optimizing images and reducing JavaScript.",
       message_pl:
