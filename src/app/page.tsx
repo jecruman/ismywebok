@@ -10,10 +10,12 @@ import FeatureGrid from '@/components/FeatureGrid';
 import StepsSection from '@/components/StepsSection';
 import FaqSection from '@/components/FaqSection';
 import SiteFooter from '@/components/SiteFooter';
+import type { Lang } from '@/lib/lang';
 
 const schema = z.object({ url: z.string().url() });
 
 export default function HomePage() {
+  const [lang, setLang] = useState<Lang>('en');
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -24,7 +26,11 @@ export default function HomePage() {
     setError(null);
     const parse = schema.safeParse({ url });
     if (!parse.success) {
-      setError('Please enter a valid URL (e.g. https://example.com)');
+      setError(
+        lang === 'en'
+          ? 'Please enter a valid URL (e.g. https://example.com)'
+          : 'Podaj poprawny adres URL (np. https://twoja-strona.pl)'
+      );
       return;
     }
     setLoading(true);
@@ -44,25 +50,72 @@ export default function HomePage() {
     }
   }
 
+  const heroTitle =
+    lang === 'en'
+      ? 'Is your website really OK?'
+      : 'Czy Twoja strona naprawdę jest OK?';
+
+  const heroSubtitle =
+    lang === 'en'
+      ? 'IsMyWebOk runs a real performance audit using Google PageSpeed Insights and shows you a clear health score and things to fix.'
+      : 'IsMyWebOk wykonuje prawdziwy audyt wydajności z użyciem Google PageSpeed Insights i pokazuje prosty wynik oraz listę najważniejszych poprawek.';
+
+  const heroTagline =
+    lang === 'en'
+      ? 'Check if your website is OK in 30 seconds'
+      : 'Sprawdź, czy Twoja strona jest OK w 30 sekund';
+
+  const ctaText = lang === 'en' ? 'Run free check' : 'Wykonaj darmowy test';
+
+  const urlPlaceholder =
+    lang === 'en' ? 'https://your-site.com' : 'https://twoja-strona.pl';
+
+  const poweredText =
+    lang === 'en'
+      ? 'Powered by Google PageSpeed Insights. No login required for a quick check.'
+      : 'Korzysta z Google PageSpeed Insights. Szybki test bez logowania.';
+
+  const previewTitle =
+    lang === 'en'
+      ? 'Live website health preview'
+      : 'Podgląd wyniku zdrowia strony';
+
+  const previewSubtitle =
+    lang === 'en'
+      ? 'Run a check to see your own score.'
+      : 'Uruchom test, aby zobaczyć swój wynik.';
+
+  const previewExampleLabel =
+    lang === 'en'
+      ? 'Example: https://vercel.com (sample data)'
+      : 'Przykład: https://vercel.com (dane przykładowe)';
+
+  const previewExampleText =
+    lang === 'en'
+      ? 'Your website is generally OK but could be faster on mobile and has a few SEO content gaps.'
+      : 'Twoja strona jest ogólnie OK, ale mogłaby działać szybciej na telefonach i ma kilka braków SEO.';
+
+  const topIssuesLabel =
+    lang === 'en' ? 'Top issues to fix' : 'Najważniejsze problemy do poprawy';
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader lang={lang} onChangeLang={setLang} />
 
       {/* HERO */}
       <Section className="py-14 sm:py-20">
         <Container className="flex flex-col gap-10 md:flex-row md:items-center">
           <div className="md:w-1/2">
             <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-emerald-700">
-              ✅ Check if your website is OK in 30 seconds
+              ✅ {heroTagline}
             </span>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-              Is your website <span className="text-brand-green">really</span>{' '}
-              OK?
+              {heroTitle}{' '}
+              <span className="text-brand-green">
+                {lang === 'en' ? '' : ''}
+              </span>
             </h1>
-            <p className="mt-3 text-lg text-gray-600">
-              IsMyWebOk runs a real performance audit using Google PageSpeed
-              Insights and shows you a clear health score and things to fix.
-            </p>
+            <p className="mt-3 text-lg text-gray-600">{heroSubtitle}</p>
 
             <form
               onSubmit={onSubmit}
@@ -71,7 +124,7 @@ export default function HomePage() {
               <input
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://your-site.com"
+                placeholder={urlPlaceholder}
                 className="flex-1 rounded-xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
               />
               <button
@@ -79,7 +132,7 @@ export default function HomePage() {
                 disabled={loading}
                 className="rounded-xl bg-brand-green px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 disabled:opacity-60"
               >
-                {loading ? 'Checking…' : 'Run free check'}
+                {loading ? (lang === 'en' ? 'Checking…' : 'Sprawdzanie…') : ctaText}
               </button>
             </form>
 
@@ -89,10 +142,7 @@ export default function HomePage() {
               </p>
             )}
 
-            <p className="mt-3 text-xs text-gray-500">
-              Powered by Google PageSpeed Insights. No login required for a
-              quick check.
-            </p>
+            <p className="mt-3 text-xs text-gray-500">{poweredText}</p>
           </div>
 
           {/* LIVE RESULT CARD */}
@@ -101,10 +151,10 @@ export default function HomePage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h2 className="text-sm font-semibold text-gray-800">
-                    Live website health preview
+                    {previewTitle}
                   </h2>
                   <p className="text-xs text-gray-500">
-                    Run a check to see your own score.
+                    {previewSubtitle}
                   </p>
                 </div>
                 <ScoreBadge score={result?.score ?? 72} />
@@ -113,19 +163,19 @@ export default function HomePage() {
               <div className="mt-4 rounded-xl bg-gray-50 p-4 text-sm text-gray-700">
                 <p className="font-medium">
                   {result
-                    ? 'Latest audit'
-                    : 'Example: https://vercel.com (sample data)'}
+                    ? lang === 'en'
+                      ? 'Latest audit'
+                      : 'Ostatni audyt'
+                    : previewExampleLabel}
                 </p>
                 <p className="mt-1 text-gray-600">
-                  {result
-                    ? result.summary
-                    : 'Your website is generally OK but could be faster on mobile and has a few SEO content gaps.'}
+                  {result ? result.summary : previewExampleText}
                 </p>
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <MetricTile
-                  label="Mobile score"
+                  label={lang === 'en' ? 'Mobile score' : 'Wynik mobile'}
                   value={
                     result?.metrics?.mobile_score !== undefined
                       ? result.metrics.mobile_score
@@ -133,7 +183,7 @@ export default function HomePage() {
                   }
                 />
                 <MetricTile
-                  label="Desktop score"
+                  label={lang === 'en' ? 'Desktop score' : 'Wynik desktop'}
                   value={
                     result?.metrics?.desktop_score !== undefined
                       ? result.metrics.desktop_score
@@ -141,7 +191,7 @@ export default function HomePage() {
                   }
                 />
                 <MetricTile
-                  label="LCP (mobile)"
+                  label={lang === 'en' ? 'LCP (mobile)' : 'LCP (mobile)'}
                   value={
                     result?.metrics?.mobile_lcp !== undefined
                       ? result.metrics.mobile_lcp
@@ -149,7 +199,7 @@ export default function HomePage() {
                   }
                 />
                 <MetricTile
-                  label="CLS (mobile)"
+                  label={lang === 'en' ? 'CLS (mobile)' : 'CLS (mobile)'}
                   value={
                     result?.metrics?.mobile_cls !== undefined
                       ? result.metrics.mobile_cls
@@ -161,7 +211,7 @@ export default function HomePage() {
               {result?.topFindings && (
                 <div className="mt-4 border-t pt-3">
                   <p className="text-xs font-semibold text-gray-700">
-                    Top issues to fix
+                    {topIssuesLabel}
                   </p>
                   <ul className="mt-1 list-disc space-y-1 pl-5 text-xs text-gray-600">
                     {result.topFindings.map((f: any, idx: number) => (
@@ -179,16 +229,16 @@ export default function HomePage() {
       </Section>
 
       {/* FEATURES */}
-      <FeatureGrid />
+      <FeatureGrid lang={lang} />
 
       {/* HOW IT WORKS */}
-      <StepsSection />
+      <StepsSection lang={lang} />
 
       {/* FAQ */}
-      <FaqSection />
+      <FaqSection lang={lang} />
 
       {/* FOOTER */}
-      <SiteFooter />
+      <SiteFooter lang={lang} />
     </>
   );
 }
