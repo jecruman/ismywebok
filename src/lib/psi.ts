@@ -113,7 +113,8 @@ const summary_pl =
   return {
     url,
     score,
-    summary,
+    summary_en,
+    summary_pl,
     metrics,
     topFindings,
   };
