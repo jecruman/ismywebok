@@ -162,11 +162,22 @@ export default function HomePage() {
 
               <div className="mt-4 rounded-xl bg-gray-50 p-4 text-sm text-gray-700">
                 <p className="font-medium">
-                  {result
-                    ? lang === 'en'
-                      ? 'Latest audit'
-                      : 'Ostatni audyt'
-                    : previewExampleLabel}
+                  {result ? (
+                    <>
+                      {lang === 'en' ? 'Latest audit' : 'Ostatni audyt'}
+                      {result.from_cache && result.cached_at && (
+                        <span className="ml-1 text-xs text-gray-500">
+                          (
+                          {lang === 'en'
+                            ? `cached at ${new Date(result.cached_at).toLocaleString()}`
+                            : `zapisane ${new Date(result.cached_at).toLocaleString()}`}
+                          )
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    previewExampleLabel
+                  )}
                 </p>
                 <p className="mt-1 text-gray-600">
                   {result
