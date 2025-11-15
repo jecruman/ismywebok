@@ -8,7 +8,8 @@ export const AuditFinding = z.object({
 export const AuditReport = z.object({
   url: z.string().url(),
   score: z.number().min(0).max(100),
-  summary: z.string(),
+  summary_en: z.string(),
+  summary_pl: z.string(),
   metrics: z.record(z.union([z.string(), z.number()])),
   topFindings: z.array(AuditFinding),
 });
