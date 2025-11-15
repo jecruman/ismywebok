@@ -5,6 +5,11 @@ import { z } from 'zod';
 import Container from '@/components/Container';
 import Section from '@/components/Section';
 import ScoreBadge from '@/components/ScoreBadge';
+import SiteHeader from '@/components/SiteHeader';
+import FeatureGrid from '@/components/FeatureGrid';
+import StepsSection from '@/components/StepsSection';
+import FaqSection from '@/components/FaqSection';
+import SiteFooter from '@/components/SiteFooter';
 
 const schema = z.object({ url: z.string().url() });
 
@@ -33,79 +38,166 @@ export default function HomePage() {
       setResult(data);
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
+      setResult(null);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Container className="py-16">
-      <Section className="py-10">
-        <h1 className="text-4xl font-semibold tracking-tight">
-          Is your website OK?
-        </h1>
-        <p className="mt-3 text-lg text-gray-600">
-          Run a free health check in 30 seconds.
-        </p>
+    <>
+      <SiteHeader />
 
-        <form
-          onSubmit={onSubmit}
-          className="mt-6 flex max-w-xl flex-col gap-3 sm:flex-row"
-        >
-          <input
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://your-site.com"
-            className="flex-1 rounded-xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded-xl bg-brand-green px-5 py-3 text-white font-medium disabled:opacity-60"
-          >
-            {loading ? 'Checking…' : 'Check'}
-          </button>
-        </form>
+      {/* HERO */}
+      <Section className="py-14 sm:py-20">
+        <Container className="flex flex-col gap-10 md:flex-row md:items-center">
+          <div className="md:w-1/2">
+            <span className="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-emerald-700">
+              ✅ Check if your website is OK in 30 seconds
+            </span>
+            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+              Is your website <span className="text-brand-green">really</span>{' '}
+              OK?
+            </h1>
+            <p className="mt-3 text-lg text-gray-600">
+              IsMyWebOk runs a real performance audit using Google PageSpeed
+              Insights and shows you a clear health score and things to fix.
+            </p>
 
-        {error && <p className="mt-4 text-red-600">{error}</p>}
+            <form
+              onSubmit={onSubmit}
+              className="mt-6 flex max-w-xl flex-col gap-3 sm:flex-row"
+            >
+              <input
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://your-site.com"
+                className="flex-1 rounded-xl border px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-green"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="rounded-xl bg-brand-green px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 disabled:opacity-60"
+              >
+                {loading ? 'Checking…' : 'Run free check'}
+              </button>
+            </form>
 
-        {result && (
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-2xl border p-5">
+            {error && (
+              <p className="mt-3 text-sm text-red-600">
+                {error}
+              </p>
+            )}
+
+            <p className="mt-3 text-xs text-gray-500">
+              Powered by Google PageSpeed Insights. No login required for a
+              quick check.
+            </p>
+          </div>
+
+          {/* LIVE RESULT CARD */}
+          <div className="md:w-1/2">
+            <div className="rounded-2xl border bg-white/70 p-5 shadow-sm">
               <div className="flex items-center justify-between gap-4">
-                <h2 className="text-xl font-semibold">Overall Health</h2>
-                <ScoreBadge score={result.score} />
+                <div>
+                  <h2 className="text-sm font-semibold text-gray-800">
+                    Live website health preview
+                  </h2>
+                  <p className="text-xs text-gray-500">
+                    Run a check to see your own score.
+                  </p>
+                </div>
+                <ScoreBadge score={result?.score ?? 72} />
               </div>
-              <p className="mt-2 text-gray-600">{result.summary}</p>
-              <ul className="mt-4 list-disc space-y-1 pl-6 text-gray-700">
-                {result.topFindings?.map((f: any, i: number) => (
-                  <li key={i}>
-                    <span className="font-medium">{f.severity}:</span>{' '}
-                    {f.message}
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            <div className="rounded-2xl border p-5">
-              <h3 className="text-lg font-semibold">Key Metrics</h3>
-              <div className="mt-3 space-y-2 text-sm">
-                {Object.entries(result.metrics || {}).map(([k, v]) => (
-                  <div
-                    key={k}
-                    className="flex justify-between border-b py-2 last:border-b-0"
-                  >
-                    <span className="capitalize">
-                      {k.replace(/_/g, ' ')}
-                    </span>
-                    <span className="font-medium">{String(v)}</span>
-                  </div>
-                ))}
+              <div className="mt-4 rounded-xl bg-gray-50 p-4 text-sm text-gray-700">
+                <p className="font-medium">
+                  {result
+                    ? 'Latest audit'
+                    : 'Example: https://vercel.com (sample data)'}
+                </p>
+                <p className="mt-1 text-gray-600">
+                  {result
+                    ? result.summary
+                    : 'Your website is generally OK but could be faster on mobile and has a few SEO content gaps.'}
+                </p>
               </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+                <MetricTile
+                  label="Mobile score"
+                  value={
+                    result?.metrics?.mobile_score !== undefined
+                      ? result.metrics.mobile_score
+                      : 64
+                  }
+                />
+                <MetricTile
+                  label="Desktop score"
+                  value={
+                    result?.metrics?.desktop_score !== undefined
+                      ? result.metrics.desktop_score
+                      : 89
+                  }
+                />
+                <MetricTile
+                  label="LCP (mobile)"
+                  value={
+                    result?.metrics?.mobile_lcp !== undefined
+                      ? result.metrics.mobile_lcp
+                      : '3.8 s'
+                  }
+                />
+                <MetricTile
+                  label="CLS (mobile)"
+                  value={
+                    result?.metrics?.mobile_cls !== undefined
+                      ? result.metrics.mobile_cls
+                      : '0.12'
+                  }
+                />
+              </div>
+
+              {result?.topFindings && (
+                <div className="mt-4 border-t pt-3">
+                  <p className="text-xs font-semibold text-gray-700">
+                    Top issues to fix
+                  </p>
+                  <ul className="mt-1 list-disc space-y-1 pl-5 text-xs text-gray-600">
+                    {result.topFindings.map((f: any, idx: number) => (
+                      <li key={idx}>
+                        <span className="font-medium">{f.severity}:</span>{' '}
+                        {f.message}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </Container>
       </Section>
-    </Container>
+
+      {/* FEATURES */}
+      <FeatureGrid />
+
+      {/* HOW IT WORKS */}
+      <StepsSection />
+
+      {/* FAQ */}
+      <FaqSection />
+
+      {/* FOOTER */}
+      <SiteFooter />
+    </>
+  );
+}
+
+function MetricTile({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-lg bg-white p-3 shadow-sm">
+      <p className="text-[11px] text-gray-500">{label}</p>
+      <p className="mt-1 text-sm font-semibold text-gray-800">{value}</p>
+    </div>
   );
 }
