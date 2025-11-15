@@ -169,7 +169,9 @@ export default function HomePage() {
                     : previewExampleLabel}
                 </p>
                 <p className="mt-1 text-gray-600">
-                  {result ? result.summary : previewExampleText}
+                  {result
+                    ? (lang === 'en' ? result.summary_en : result.summary_pl)
+                    : previewExampleText}
                 </p>
               </div>
 
