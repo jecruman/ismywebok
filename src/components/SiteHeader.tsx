@@ -1,6 +1,22 @@
-import Container from './Container';
+'use client';
 
-export default function SiteHeader() {
+import Container from './Container';
+import type { Lang } from '@/lib/lang';
+
+interface Props {
+  lang: Lang;
+  onChangeLang: (lang: Lang) => void;
+}
+
+export default function SiteHeader({ lang, onChangeLang }: Props) {
+  const isEn = lang === 'en';
+
+  const nav = {
+    features: isEn ? 'Features' : 'Funkcje',
+    how: isEn ? 'How it works' : 'Jak to działa',
+    faq: 'FAQ',
+  };
+
   return (
     <header className="border-b bg-white/70 backdrop-blur">
       <Container className="flex items-center justify-between py-3">
@@ -12,17 +28,39 @@ export default function SiteHeader() {
             IsMyWebOk
           </span>
         </div>
-        <nav className="hidden items-center gap-6 text-xs text-gray-600 sm:flex">
-          <a href="#features" className="hover:text-gray-900">
-            Features
-          </a>
-          <a href="#how-it-works" className="hover:text-gray-900">
-            How it works
-          </a>
-          <a href="#faq" className="hover:text-gray-900">
-            FAQ
-          </a>
-        </nav>
+        <div className="flex items-center gap-4">
+          <nav className="hidden items-center gap-6 text-xs text-gray-600 sm:flex">
+            <a href="#features" className="hover:text-gray-900">
+              {nav.features}
+            </a>
+            <a href="#how-it-works" className="hover:text-gray-900">
+              {nav.how}
+            </a>
+            <a href="#faq" className="hover:text-gray-900">
+              {nav.faq}
+            </a>
+          </nav>
+          <div className="flex items-center rounded-full border bg-white text-[11px]">
+            <button
+              type="button"
+              onClick={() => onChangeLang('en')}
+              className={`px-2 py-1 ${
+                isEn ? 'bg-brand-green text-white rounded-full' : 'text-gray-600'
+              }`}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => onChangeLang('pl')}
+              className={`px-2 py-1 ${
+                !isEn ? 'bg-brand-green text-white rounded-full' : 'text-gray-600'
+              }`}
+            >
+              PL
+            </button>
+          </div>
+        </div>
       </Container>
     </header>
   );
