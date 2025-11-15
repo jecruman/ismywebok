@@ -1,11 +1,19 @@
-import { clsx } from 'clsx';
+import { clsx } from "clsx";
+import type { HTMLAttributes, ReactNode } from "react";
+
+type SectionProps = {
+  className?: string;
+  children: ReactNode;
+} & HTMLAttributes<HTMLElement>;
 
 export default function Section({
   className,
   children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return <section className={clsx('w-full', className)}>{children}</section>;
+  ...rest
+}: SectionProps) {
+  return (
+    <section className={clsx("w-full", className)} {...rest}>
+      {children}
+    </section>
+  );
 }
