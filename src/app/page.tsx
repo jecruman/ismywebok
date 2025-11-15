@@ -218,8 +218,8 @@ export default function HomePage() {
                   <ul className="mt-1 list-disc space-y-1 pl-5 text-xs text-gray-600">
                     {result.topFindings.map((f: any, idx: number) => (
                       <li key={idx}>
-                        <span className="font-medium">{f.severity}:</span>{' '}
-                        {f.message}
+                        <span className="font-medium">{f.severity}:</span>{" "}
+                        {lang === "en" ? f.message_en : f.message_pl}
                       </li>
                     ))}
                   </ul>
