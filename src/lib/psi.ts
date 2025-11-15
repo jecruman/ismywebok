@@ -1,7 +1,6 @@
-import { AuditReport } from "./audit-schema";
+import type { AuditReport } from "./audit-schema";
 
 const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
-
 type Strategy = "mobile" | "desktop";
 
 async function fetchPsi(url: string, strategy: Strategy, apiKey: string) {
@@ -54,7 +53,6 @@ export async function runPageSpeedAudit(url: string): Promise<AuditReport> {
     throw new Error("Missing GOOGLE_PSI_API_KEY");
   }
 
-  // Run both mobile & desktop – mobile is usually the main one for scoring
   const [mobile, desktop] = await Promise.all([
     fetchPsi(url, "mobile", apiKey),
     fetchPsi(url, "desktop", apiKey),
@@ -63,23 +61,21 @@ export async function runPageSpeedAudit(url: string): Promise<AuditReport> {
   const mobileMetrics = extractMetrics(mobile);
   const desktopMetrics = extractMetrics(desktop);
 
-  // Choose overall score from mobile (stricter)
   const score = mobileMetrics.perfScore ?? desktopMetrics.perfScore ?? 0;
 
-const summary_en =
-  score >= 80
-    ? "Your website is performing well overall, with room for small improvements."
-    : score >= 60
-    ? "Your website is OK, but there are several performance issues worth fixing."
-    : "Your website is currently slow or poorly optimized. Fixing key issues could significantly improve user experience and SEO.";
+  const summary_en =
+    score >= 80
+      ? "Your website is performing well overall, with room for small improvements."
+      : score >= 60
+      ? "Your website is OK, but there are several performance issues worth fixing."
+      : "Your website is currently slow or poorly optimized. Fixing key issues could significantly improve user experience and SEO.";
 
-const summary_pl =
-  score >= 80
-    ? "Twoja strona działa ogólnie dobrze, wymaga jedynie drobnych poprawek."
-    : score >= 60
-    ? "Twoja strona jest w porządku, ale wymaga kilku istotnych usprawnień."
-    : "Twoja strona działa obecnie wolno lub jest słabo zoptymalizowana. Poprawa kluczowych elementów może znacząco polepszyć doświadczenie użytkownika i SEO.";
-
+  const summary_pl =
+    score >= 80
+      ? "Twoja strona działa ogólnie dobrze, wymaga jedynie drobnych poprawek."
+      : score >= 60
+      ? "Twoja strona jest w porządku, ale wymaga kilku istotnych usprawnień."
+      : "Twoja strona działa obecnie wolno lub jest słabo zoptymalizowana. Poprawa kluczowych elementów może znacząco polepszyć doświadczenie użytkownika i SEO.";
 
   const metrics: Record<string, string | number> = {
     mobile_score: mobileMetrics.perfScore ?? "n/a",
