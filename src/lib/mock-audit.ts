@@ -9,8 +9,10 @@ export async function mockAudit(url: string): Promise<AuditReport> {
   return {
     url,
     score,
-    summary:
+    summary_en:
       'Your website is generally OK but could be faster on mobile and has a few SEO content gaps.',
+    summary_pl: 
+      'Twoja strona dobrze się ma ale moze szybciej działać na mobile',
     metrics: {
       lcp: '3.8s',
       cls: 0.12,
