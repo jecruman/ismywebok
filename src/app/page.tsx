@@ -184,6 +184,18 @@ export default function HomePage() {
                     ? (lang === 'en' ? result.summary_en : result.summary_pl)
                     : previewExampleText}
                 </p>
+
+                {/* SEE HISTORY LINK */}
+                {result && result.url && (
+                  <div className="mt-3">
+                    <a
+                      href={`/history?url=${encodeURIComponent(result.url)}`}
+                      className="text-xs font-medium text-brand-green hover:underline"
+                    >
+                      {lang === 'en' ? 'See history →' : 'Zobacz historię →'}
+                    </a>
+                  </div>
+                )}
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
@@ -229,8 +241,8 @@ export default function HomePage() {
                   <ul className="mt-1 list-disc space-y-1 pl-5 text-xs text-gray-600">
                     {result.topFindings.map((f: any, idx: number) => (
                       <li key={idx}>
-                        <span className="font-medium">{f.severity}:</span>{" "}
-                        {lang === "en" ? f.message_en : f.message_pl}
+                        <span className="font-medium">{f.severity}:</span>{' '}
+                        {lang === 'en' ? f.message_en : f.message_pl}
                       </li>
                     ))}
                   </ul>
