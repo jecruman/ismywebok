@@ -15,6 +15,7 @@ export default function SiteHeader({ lang, onChangeLang }: Props) {
     features: isEn ? 'Features' : 'Funkcje',
     how: isEn ? 'How it works' : 'Jak to działa',
     faq: 'FAQ',
+    history: isEn ? 'History' : 'Historia',
   };
 
   return (
@@ -38,6 +39,9 @@ export default function SiteHeader({ lang, onChangeLang }: Props) {
             </a>
             <a href="#faq" className="hover:text-gray-900">
               {nav.faq}
+            </a>
+            <a href="/history" className="hover:text-gray-900">
+              {nav.history}
             </a>
           </nav>
           <div className="flex items-center rounded-full border bg-white text-[11px]">
