@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 export const AuditFinding = z.object({
-  severity: z.enum(['HIGH', 'MED', 'LOW']),
-  message: z.string(),
+  severity: z.enum(["HIGH", "MED", "LOW"]),
+  message_en: z.string(),
+  message_pl: z.string(),
 });
 
 export const AuditReport = z.object({
