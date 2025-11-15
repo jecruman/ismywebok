@@ -1,2 +1,2 @@
 # IsMyWebOk – MVP
-See canvas for full documentation.
+See canvas for full documentation. Wait for what is coming...
