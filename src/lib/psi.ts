@@ -66,12 +66,20 @@ export async function runPageSpeedAudit(url: string): Promise<AuditReport> {
   // Choose overall score from mobile (stricter)
   const score = mobileMetrics.perfScore ?? desktopMetrics.perfScore ?? 0;
 
-  const summary =
-    score >= 80
-      ? "Your website is performing well overall, with room for small improvements."
-      : score >= 60
-      ? "Your website is OK, but there are several performance issues worth fixing."
-      : "Your website is currently slow or poorly optimized. Fixing key issues could significantly improve user experience and SEO.";
+const summary_en =
+  score >= 80
+    ? "Your website is performing well overall, with room for small improvements."
+    : score >= 60
+    ? "Your website is OK, but there are several performance issues worth fixing."
+    : "Your website is currently slow or poorly optimized. Fixing key issues could significantly improve user experience and SEO.";
+
+const summary_pl =
+  score >= 80
+    ? "Twoja strona działa ogólnie dobrze, wymaga jedynie drobnych poprawek."
+    : score >= 60
+    ? "Twoja strona jest w porządku, ale wymaga kilku istotnych usprawnień."
+    : "Twoja strona działa obecnie wolno lub jest słabo zoptymalizowana. Poprawa kluczowych elementów może znacząco polepszyć doświadczenie użytkownika i SEO.";
+
 
   const metrics: Record<string, string | number> = {
     mobile_score: mobileMetrics.perfScore ?? "n/a",
